@@ -1,0 +1,24 @@
+# Ignore Git and GitHub CI files (saves build context upload time)
+.git
+.github
+.gitignore
+.dockerignore
+README.md
+
+# Ignore local audio/datasets so they don't get baked into the image
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.mid
+*.midi
+dataset/
+output/
+stems/
+models/
+
+# Ignore local python environments
+venv/
+env/
+__pycache__/
+*.pyc

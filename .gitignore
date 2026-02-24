@@ -1,0 +1,26 @@
+# Ignore local python virtual environments
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Ignore Audio Datasets and exported MIDI (Keep your repo small)
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.mid
+*.midi
+
+# Ignore local output/dataset folders
+dataset/
+output/
+stems/
+models/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# NOTE: The UVR source code tarball MUST be tracked in git 
+# so the Dockerfile can COPY it. Do not ignore it!
