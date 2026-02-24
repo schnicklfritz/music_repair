@@ -36,19 +36,24 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Layer 4: UVR5 source + venv + Matchering + Transkun (auto-download)
-RUN wget --no-check-certificate \
-         "https://sourceforge.net/projects/ult-vocal-remover-uvr.mirror/files/v5.6/v5.6%20-%20UVR%20GUI%20source%20code.tar.gz/download" \
-         -O /opt/uvr5.tar.gz && \
-    mkdir -p /opt/uvr5 && \
+# Layer 4: UVR5 source + venv + Matchering + Transkun (FULLY FIXED)
+COPY uvr5_gui_v5.6.tar.gz /opt/uvr5.tar.gz
+RUN mkdir -p /opt/uvr5 && \
     tar -xzvf /opt/uvr5.tar.gz -C /opt/uvr5 --strip-components=1 && \
     rm /opt/uvr5.tar.gz
 
+# Create venv and pre-install build dependencies FIRST
 RUN python3.10 -m venv /opt/uvr5/venv && \
-    /opt/uvr5/venv/bin/pip install --upgrade pip wheel && \
-    SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True \
-        /opt/uvr5/venv/bin/pip install -r /opt/uvr5/requirements.txt && \
-    /opt/uvr5/venv/bin/pip install torch==2.5.0 matchering transkun && \
+    . /opt/uvr5/venv/bin/activate && \
+    pip install --upgrade pip setuptools wheel Cython && \
+    # Pre-install scikit-learn to avoid deprecated sklearn conflict
+    pip install scikit-learn && \
+    # Export sklearn env var BEFORE requirements.txt
+    export SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True && \
+    # Install requirements with no-cache to avoid corrupted wheels
+    pip install --no-cache-dir -r /opt/uvr5/requirements.txt && \
+    # Install additional packages
+    pip install --no-cache-dir torch==2.5.0 matchering transkun && \
     chown -R 1000:0 /opt/uvr5
 
 # Layer 5: REAPER v7.61
