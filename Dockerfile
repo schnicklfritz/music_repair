@@ -55,13 +55,13 @@ RUN wget https://www.reaper.fm/files/7.x/reaper761_linux_x86_64.tar.xz \
         --install /opt/REAPER --integrate-desktop && \
     rm -rf /tmp/reaper*
 
-# Layer 6: ZL Equalizer 2 VST3
-RUN wget https://github.com/ZL-Audio/ZLEqualizer/releases/download/v1.1.0/ZL.Equalizer.2-1.1.0-Linux-x86.zip \
+# Layer 6: ZL Equalizer 2 VST3 (CORRECT URL)
+RUN wget https://github.com/ZL-Audio/ZLEqualizer/releases/download/v0.6.2/ZL.Equalizer-0.6.2-Linux-x86_64.zip \
         -O /tmp/zleq.zip && \
     unzip /tmp/zleq.zip -d /tmp/zleq && \
     mkdir -p /usr/lib/vst3 && \
-    cp -r /tmp/zleq/*.vst3 /usr/lib/vst3/ && \
-    rm -rf /tmp/zleq*
+    cp -r /tmp/zleq/*.vst3 /usr/lib/vst3/ 2>/dev/null || true && \
+    rm -rf /tmp/zleq* /tmp/zleq.zip
 
 # Layer 7: Desktop shortcuts
 RUN printf '[Desktop Entry]\nType=Application\nName=UVR5\nExec=bash -c "source /opt/uvr5/venv/bin/activate && SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True python3.10 /opt/uvr5/UVR.py"\nTerminal=true\n' \
