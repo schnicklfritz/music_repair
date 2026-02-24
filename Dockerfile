@@ -24,15 +24,15 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Layer 3: Python 3.11
+# Layer 3: Python 3.10 (UVR5 v5.6 constraint: >=3.7,<3.11)
 RUN add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        python3.11 \
-        python3.11-dev \
-        python3.11-venv \
-        python3.11-tk \
-        python3.11-distutils && \
+        python3.10 \
+        python3.10-dev \
+        python3.10-venv \
+        python3.10-tk \
+        python3.10-distutils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -44,7 +44,7 @@ RUN wget --no-check-certificate \
     tar -xzvf /opt/uvr5.tar.gz -C /opt/uvr5 --strip-components=1 && \
     rm /opt/uvr5.tar.gz
 
-RUN python3.11 -m venv /opt/uvr5/venv && \
+RUN python3.10 -m venv /opt/uvr5/venv && \
     /opt/uvr5/venv/bin/pip install --upgrade pip wheel && \
     SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True \
         /opt/uvr5/venv/bin/pip install -r /opt/uvr5/requirements.txt && \
@@ -68,7 +68,7 @@ RUN wget https://github.com/ZL-Audio/ZLEqualizer/releases/download/v1.1.0/ZL.Equ
     rm -rf /tmp/zleq*
 
 # Layer 7: Desktop shortcuts
-RUN printf '[Desktop Entry]\nType=Application\nName=UVR5\nExec=bash -c "source /opt/uvr5/venv/bin/activate && SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True python3.11 /opt/uvr5/UVR.py"\nTerminal=true\n' \
+RUN printf '[Desktop Entry]\nType=Application\nName=UVR5\nExec=bash -c "source /opt/uvr5/venv/bin/activate && SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True python3.10 /opt/uvr5/UVR.py"\nTerminal=true\n' \
         > /root/Desktop/UVR5.desktop && \
     printf '[Desktop Entry]\nType=Application\nName=REAPER\nExec=/opt/REAPER/reaper\nTerminal=false\n' \
         > /root/Desktop/REAPER.desktop && \
