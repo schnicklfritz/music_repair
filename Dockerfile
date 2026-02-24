@@ -36,9 +36,11 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Layer 4: UVR5 source + venv + Matchering + Transkun
-COPY "v5.6 - UVR GUI source code.tar.gz" /opt/uvr5.tar.gz
-RUN mkdir -p /opt/uvr5 && \
+# Layer 4: UVR5 source + venv + Matchering + Transkun (auto-download)
+RUN wget --no-check-certificate \
+         "https://sourceforge.net/projects/ult-vocal-remover-uvr.mirror/files/v5.6/v5.6%20-%20UVR%20GUI%20source%20code.tar.gz/download" \
+         -O /opt/uvr5.tar.gz && \
+    mkdir -p /opt/uvr5 && \
     tar -xzvf /opt/uvr5.tar.gz -C /opt/uvr5 --strip-components=1 && \
     rm /opt/uvr5.tar.gz
 
