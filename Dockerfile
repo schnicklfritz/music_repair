@@ -63,11 +63,13 @@ RUN wget https://github.com/ZL-Audio/ZLEqualizer/releases/download/v0.6.2/ZL.Equ
     cp -r /tmp/zleq/*.vst3 /usr/lib/vst3/ 2>/dev/null || true && \
     rm -rf /tmp/zleq* /tmp/zleq.zip
 
-# Layer 7: Desktop shortcuts
-RUN printf '[Desktop Entry]\nType=Application\nName=UVR5\nExec=bash -c "source /opt/uvr5/venv/bin/activate && SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True python3.10 /opt/uvr5/UVR.py"\nTerminal=true\n' \
-        > /root/Desktop/UVR5.desktop && \
-    printf '[Desktop Entry]\nType=Application\nName=REAPER\nExec=/opt/REAPER/reaper\nTerminal=false\n' \
-        > /root/Desktop/REAPER.desktop && \
-    chmod +x /root/Desktop/UVR5.desktop /root/Desktop/REAPER.desktop
+# Layer 7: Desktop shortcuts (FIXED: kasm-user home, not root)
+RUN mkdir -p /home/kasm-user/Desktop && \
+    printf '[Desktop Entry]\nType=Application\nName=UVR5\nExec=bash -c "source /opt/uvr5/venv/bin/activate && SKLEARN_ALLOW_DEPRECATED_SKLEARN_PACKAGE_INSTALL=True python3.10 /opt/uvr5/UVR.py"\nTerminal=true\nIcon=applications-multimedia\n' \
+        > /home/kasm-user/Desktop/UVR5.desktop && \
+    printf '[Desktop Entry]\nType=Application\nName=REAPER\nExec=/opt/REAPER/reaper\nTerminal=false\nIcon=audio-x-generic\n' \
+        > /home/kasm-user/Desktop/REAPER.desktop && \
+    chmod +x /home/kasm-user/Desktop/*.desktop && \
+    chown -R 1000:0 /home/kasm-user/Desktop
 
 USER 1000
